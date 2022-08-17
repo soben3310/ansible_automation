@@ -1,0 +1,67 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install apache2 and php support packages and update cache
+    yum:
+      update_only: yes
+      update_cache: yes
+    when: (ansible_os_family == "RedHat") or (ansible_distribution == "CentOs")
+
+  - name: install apache2 and php support packages and update cache
+    apt:
+      name:
+      update_only: yes
+      update_cache: yes
+    when: (ansible_os_family == "Debian") or (ansible_distribution == "Ubuntu")
+
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: install apache2 and php support packages and update cache
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+      update_cache: yes
+    when: (ansible_os_family == "Debian") or (ansible_distribution == "Ubuntu")
+
+
+  - name: install apache2 and php support packages and update cache
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+      update_cache: yes
+    when: (ansible_os_family == "Debian") or (ansible_distribution == "Ubuntu")
+
+- hosts: db_servers
+  become: true
+  tasks:
+    
+  - name: install mariadb package (cutefish)
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_os_family == "Debian"
+
+  - name: install mariadb package (Centos)
+    yum:
+      name: mariadb
+      state: latest
+    when: ansible_os_family == "RedHat"
+
+- hosts: file_servers
+  become: true
+  tasks:
+  - name: install samba package
+    package:
+      name: samba
+      state: latest
+
