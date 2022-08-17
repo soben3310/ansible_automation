@@ -5,10 +5,40 @@
   tasks:
 
   - name: install apache2 and php support packages and update cache
+    yum:
+      update_only: yes
+      update_cache: yes
+    when: (ansible_os_family == "RedHat") or (ansible_distribution == "CentOs")
+
+  - name: install apache2 and php support packages and update cache
+    apt:
+      name:
+      update_only: yes
+      update_cache: yes
+    when: (ansible_os_family == "Debian") or (ansible_distribution == "Ubuntu")
+
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: install apache2 and php support packages and update cache
     apt:
       name:
         - apache2
         - libapache2-mod-php
       state: latest
       update_cache: yes
+    when: (ansible_os_family == "Debian") or (ansible_distribution == "Ubuntu")
+
+
+  - name: install apache2 and php support packages and update cache
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+      update_cache: yes
+    when: (ansible_os_family == "Debian") or (ansible_distribution == "Ubuntu")
+
 
