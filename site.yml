@@ -4,54 +4,55 @@
   become: true
   pre_tasks:
 
-  - name: install apache2 and php support packages and update cache
+  - name: upgrade dist and  update cache for RedHat of family
     yum:
       update_only: yes
       update_cache: yes
     when: (ansible_os_family == "RedHat") or (ansible_distribution == "CentOs")
 
-  - name: install apache2 and php support packages and update cache
+  - name: upgrade dist and  update cache for Debian os family
     apt:
-      name:
-      update_only: yes
+      upgrade: dist
       update_cache: yes
-    when: (ansible_os_family == "Debian") or (ansible_distribution == "Ubuntu")
+    when: (ansible_os_family == "Debian") and (ansible_distribution == "Ubuntu")
 
+  - name: upgrade dist for cutefish
+    apt:
+      upgrade: dist
+    when: (ansible_os_family == "Debian") and (ansible_distribution == "Cutefish")
 
 - hosts: web_servers
   become: true
   tasks:
 
-  - name: install apache2 and php support packages and update cache
+  - name: install apache2 and php support packages and update cache for Debian os family
     apt:
       name:
         - apache2
         - libapache2-mod-php
       state: latest
-      update_cache: yes
     when: (ansible_os_family == "Debian") or (ansible_distribution == "Ubuntu")
 
 
-  - name: install apache2 and php support packages and update cache
-    apt:
+  - name: install apache2 and php support packages and update cache for RedHat os family
+    yum:
       name:
-        - apache2
-        - libapache2-mod-php
+        - httpd
+        - php
       state: latest
-      update_cache: yes
-    when: (ansible_os_family == "Debian") or (ansible_distribution == "Ubuntu")
+    when: (ansible_os_family == "RedHat") or (ansible_distribution == "CentOs")
 
 - hosts: db_servers
   become: true
   tasks:
     
-  - name: install mariadb package (cutefish)
+  - name: install mariadb package (cutefish|ubuntu)
     apt:
       name: mariadb-server
       state: latest
     when: ansible_os_family == "Debian"
 
-  - name: install mariadb package (Centos)
+  - name: install mariadb package (Centos|Fedora|Almalinux)
     yum:
       name: mariadb
       state: latest
@@ -60,7 +61,7 @@
 - hosts: file_servers
   become: true
   tasks:
-  - name: install samba package
+  - name: install samba package for all os family
     package:
       name: samba
       state: latest
