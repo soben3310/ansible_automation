@@ -1,0 +1,61 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: upgrade dist and  update cache for RedHat of family
+    tags: always
+    yum:
+      update_only: yes
+      update_cache: yes
+    when: (ansible_os_family == "RedHat") or (ansible_distribution == "CentOS")
+
+  - name: upgrade dist and  update cache for Debian os family
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: (ansible_os_family == "Debian") and (ansible_distribution == "Ubuntu")
+
+  - name: upgrade dist and  update cache for Debian os family
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: (ansible_os_family == "Debian") and (ansible_distribution == "Kali")
+
+  - name: upgrade dist for cutefish
+    tags: always
+    apt:
+      upgrade: dist
+    when: (ansible_os_family == "Debian") and (ansible_distribution == "Cutefish")
+
+
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: create cyberninja user
+    tags: always
+    user:
+      name: cyberninja
+      groups: root
+
+  - name: add ssh key for cyberninja
+    tags: always
+    authorized_key:
+      user: cyberninja
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINP6ewim5rhHjQHlmIGcquQQcK49Ne+mBxdxT4tX02st ansible"
+
+
+  - name: add sudoers file for cyberninja
+    tags: always
+    copy:
+      src: sudoers_cyberninja
+      dest: /etc/sudoers.d/cyberninja
+      owner: root
+      group: root
+      mode: 0440
+
