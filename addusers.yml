@@ -1,0 +1,28 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: create cyberninja user
+    tags: always
+    user:
+      name: cyberninja
+      groups: root
+
+  - name: add ssh key for cyberninja
+    tags: always
+    authorized_key:
+      user: cyberninja
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINP6ewim5rhHjQHlmIGcquQQcK49Ne+mBxdxT4tX02st ansible"
+
+
+  - name: add sudoers file for cyberninja
+    tags: always
+    copy:
+      src: sudoers_cyberninja
+      dest: /etc/sudoers.d/cyberninja
+      owner: root
+      group: root
+      mode: 0440
+
