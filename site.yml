@@ -7,22 +7,36 @@
   - name: upgrade dist and  update cache for RedHat of family
     tags: always
     yum:
-      update_only: yes
       update_cache: yes
+    changed_when: false
     when: (ansible_os_family == "RedHat") or (ansible_distribution == "CentOS")
 
   - name: upgrade dist and  update cache for Debian os family
     tags: always
     apt:
-      upgrade: dist
       update_cache: yes
+    changed_when: false
     when: (ansible_os_family == "Debian") and (ansible_distribution == "Ubuntu")
 
-  - name: upgrade dist for cutefish
+  - name: upgrade dist and  update cache for Debian os family
     tags: always
     apt:
-      upgrade: dist
-    when: (ansible_os_family == "Debian") and (ansible_distribution == "Cutefish")
+      update_cache: yes
+    changed_when: false
+    when: (ansible_os_family == "Debian") and (ansible_distribution == "Kali")
+
+
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: add ssh key for cyberninja
+    tags: always
+    authorized_key:
+      user: cyberninja
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINP6ewim5rhHjQHlmIGcquQQcK49Ne+mBxdxT4tX02st ansible"
+
 
 #- hosts: workstations
 #  become: true
@@ -40,6 +54,7 @@
 #      owner: root
 #      group: root
 #      mode: 0755
+
 
 - hosts: web_servers
   become: true
