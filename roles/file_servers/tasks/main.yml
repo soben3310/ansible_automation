@@ -1,0 +1,5 @@
+- name: install samba package for all os family
+  tags: samba
+  package:
+    name: samba
+    state: latest

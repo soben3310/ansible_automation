@@ -1,0 +1,13 @@
+- name: install mariadb package (cutefish|ubuntu)
+  tags: db,mariadb,ubuntu,cutefish
+  apt:
+    name: mariadb-server
+    state: latest
+  when: ansible_os_family == "Debian"
+
+- name: install mariadb package (Centos|Fedora|Almalinux)
+  tags: db,mariadb,centos,alma,fedora
+  yum:
+    name: mariadb
+    state: latest
+  when: ansible_os_family == "RedHat"

@@ -1,0 +1,5 @@
+- name: add ssh key for cyberninja
+  tags: always
+  authorized_key:
+    user: cyberninja
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINP6ewim5rhHjQHlmIGcquQQcK49Ne+mBxdxT4tX02st ansible"
