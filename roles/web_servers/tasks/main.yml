@@ -1,44 +1,29 @@
-- name: install apache2 and php support packages for Debian os family
-  tags: apache,apache2,ubuntu,cutefish
-  apt:
+- name: install apache and php support packages
+  tags: apache,httpd, php
+  package:
     name:
-      - apache2
-      - libapache2-mod-php
+      - "{{ apache_package_name }}"
+      - "{{ php_package_name }}"
     state: latest
-  when: (ansible_os_family == "Debian") or (ansible_distribution == "Ubuntu")
 
-- name: install apache2 and php support packages for RedHat os family
-  tags: apache,centos,alma,fedora,httpd
-  yum:
-    name:
-      - httpd
-      - php
-    state: latest
-  when: (ansible_os_family == "RedHat") or (ansible_distribution == "CentOS")
 
-- name: start apache2 (Debian)
-  tags: apache, httpd, apache2
+- name: start and enable apache service
+  tags: apache, httpd
   service:
-    name: apache2
+    name: "{{ apache_service }}"
     state: started
     enabled: yes
-  when: (ansible_distribution == "Kali") or (ansible_os_family == "Debian")
+
 
 - name: change e-mail address for admin
-  tags: apache, httpd, apache2
+  tags: apache, httpd
   lineinfile: 
     path: /etc/apache2/apache2.conf
-    regexp: "^# ServerAdmin"
-    line: "# * This is the new root server admin's email root@localhost.com"
+    regexp: "# * This is"
+    line: "# * This is the new root server admin's email root@localhost.com.ng"
   when: (ansible_distribution == "Kali") or (ansible_os_family == "Debian")
-  register: apache2
+  notify: restart_apache
 
-- name: restart apache2 (Debian)
-  tags: apache, httpd, apache2
-  service:
-    name: apache2
-    state: restarted
-  when: apache2.changed
 
 - name: copy default html file for site
   tags: apache,apache2,httpd
