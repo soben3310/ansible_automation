@@ -1,0 +1,9 @@
+---
+
+ - hosts: all
+   become: true
+   tasks:
+     
+     - name: shutdown all hosts
+       command: /sbin/shutdown
+
