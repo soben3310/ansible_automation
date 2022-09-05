@@ -3,3 +3,11 @@ apache_service: apache2
 php_package_name: libapache2-mod-php
 ssh_users: "blackninja cyberninja"
 ssh_template_file: sshd_config_cutefish.j2
+docker_user: "blackninja"
+docker_compose_dir: /home/{{ docker_user }}/docker-wordpress-ansible
+
+wp_version: 4.7.5
+wp_db_name: wordpress
+wp_db_tb_pre: wp_
+wp_db_hosts: mysql
+wp_db_psw: mickey-HIMARS
