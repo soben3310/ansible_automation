@@ -1,0 +1,11 @@
+---
+
+- hosts: webservers
+  become: true
+  roles:
+
+    - python
+    - docker
+    - wordpress-docker
+
+
